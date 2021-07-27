@@ -1,6 +1,6 @@
 # (c)2011 Deri Taufan - deritaufan@gmail.com
 # This script will add list of computers to a group
-# 
+#
 
 
 import requests
@@ -15,14 +15,19 @@ groupID = '232' # Group ID
 apiGroupURL = "/JSSResource/computergroups/id/" + groupID
 apiComputer = "/JSSResource/computers/match/"
 
+headers = {
+    'content-type': "application/xml",
+    'authorization': "Basic " + cred
+}
+
 with open('emails.csv', 'r') as file:
     reader = csv.reader(file)
     for row in reader:
-        email = row[0]
-        print(email)
-        r = requests.get(jamfURL + apiComputer + email, headers = headers)
+        item = row[0]
+        print(item)
+        r = requests.get(jamfURL + apiComputer + item, headers = headers)
         xmlResponse = ET.fromstring(r.text)
-        
+
         for computer in xmlResponse.findall('computer'):
             id = computer.find('id').text
             name = computer.find('name').text
